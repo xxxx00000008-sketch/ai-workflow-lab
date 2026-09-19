@@ -14,7 +14,8 @@ This repository is a Chinese-first, evidence-based lab for turning current AI pr
 - Use lowercase kebab-case filenames and relative Markdown links.
 - For a new feature study, pair a knowledge card in `01-tools/` with evidence in `07-experiments/` when possible.
 - Classify content as an official capability note, experiment, workflow, case, or reusable asset. Do not present a proposal or unexecuted procedure as a verified result.
-- A real case must include a concrete input, actual execution, inspectable output, human approval points, limits, and at least one comparison of time, quality, cost, rework, or risk.
+- Deliver each real case as one self-contained Markdown document with prerequisites, concrete automation steps, inputs and outputs for each step, human approval points, expected results, limits, and an illustrative directory tree.
+- Do not create the files shown in a case's illustrative directory tree unless the user explicitly requests an implementation. Label unexecuted cases as unverified and reserve verified status for executed cases.
 - Compare traditional work, one-off AI assistance, standardized workflow, and automation when the comparison is meaningful.
 - Treat ChatGPT Project + Codex Project as one composition pattern, not the universal project architecture.
 - A website is a publication or delivery channel, not an objective unless the task explicitly concerns a site.

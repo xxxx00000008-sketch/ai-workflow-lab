@@ -1,5 +1,9 @@
 # 案例：用 ChatGPT Project 与 Codex 建立 AI Workflow Lab
 
+> 状态：已验证
+>
+> 日期：2026-09-19
+
 ## 背景
 
 用户希望长期研究 ChatGPT、Codex、Claude Code 和其他 AI 工具，并把知识库按开源项目方式运营。早期讨论已经形成项目定位和目录构想，但 GitHub 仓库只有一个简短 README。
@@ -31,6 +35,23 @@
 | ChatGPT Project | 保存长期目标、对话背景和阶段连续性 |
 | Codex 桌面端 | 检查仓库、编辑文件、验证与执行 Git 流程 |
 | Git/GitHub | 保存权威状态、差异、分支和审查入口 |
+
+## 建议目录结构（无需创建）
+
+```text
+ai-workflow-lab/
+├── 01-tools/             # 产品能力卡
+├── 02-principles/        # 稳定方法与原理
+├── 03-workflows/         # 可重复流程
+├── 04-cases/             # 单文档真实案例
+├── 07-experiments/       # 产品行为验证
+├── 08-templates/         # 可复用模板
+├── README.md             # 项目入口
+├── ROADMAP.md            # 阶段计划
+└── AGENTS.md             # Codex 工作规则
+```
+
+目录树用于解释信息如何分工，不要求读者为复现案例额外创建所有目录或示例文件。
 
 ## 结果
 
