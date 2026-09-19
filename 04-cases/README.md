@@ -4,4 +4,4 @@
 
 - [`ai-workflow-lab-project-handoff.md`](ai-workflow-lab-project-handoff.md) — 从对话规划到 Git 仓库交付
 - [`weekly-open-source-maintenance.md`](weekly-open-source-maintenance.md) — 传统维护、Codex 协作和 Automation 对比
-- [`tokens-store-codex-development-workflow.md`](tokens-store-codex-development-workflow.md) — Token 聚合平台的产品资料、功能开发、Bug 修复和 Codex 自动化闭环
+- [`tokens-store-codex-development-workflow.md`](tokens-store-codex-development-workflow.md) — Token 聚合平台的 FDE 终态交付系统：产品契约、Agent 工程、质量门禁、生产发布和反馈闭环
