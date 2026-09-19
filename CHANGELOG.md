@@ -14,3 +14,4 @@
 - 补齐 ChatGPT Memory、Library、Search、Work、Browser、Plugins、Scheduled 与 Codex 切换指南
 - 建立 Codex 桌面端功能地图及 Projects、worktree、工具、Git Review、AGENTS.md、Skills、Automations、多代理和权限专题
 - 增加 Chat、Work 与 Codex 选择指南，以及 Codex 桌面交付工作流与实战实验
+- 增加面向新用户的 Codex 桌面端从零到可审查交付主教程

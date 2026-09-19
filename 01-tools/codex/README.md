@@ -8,10 +8,13 @@
 
 Codex 是面向代理式工作的桌面工作台：把项目文件、终端、Git、网页、插件、Skills、自动化和多任务协作组织在一个可监督环境中。它的价值不是“一次生成更多代码”，而是让 Agent 能读取真实状态、执行工具、验证结果并交付可审查变更。
 
+第一次使用时，建议从 [`Codex 桌面端：从零到一次可审查交付`](desktop-guide.md) 开始，再按需要进入下面的专题。
+
 ## 功能地图
 
 | 能力 | 解决的问题 | 指南 |
 | --- | --- | --- |
+| 从零到交付 | 如何完整跑通第一次任务 | [`desktop-guide.md`](desktop-guide.md) |
 | Projects 与 Threads | 如何组织长期项目和单次成果 | [`projects-and-threads.md`](projects-and-threads.md) |
 | 本地、云端与 worktree | 工作在哪里运行，如何隔离变更 | [`environments-and-worktrees.md`](environments-and-worktrees.md) |
 | 文件、终端、浏览器与预览 | Agent 如何观察和操作真实环境 | [`tools-and-artifacts.md`](tools-and-artifacts.md) |
