@@ -1,0 +1,23 @@
+name: 内容问题
+description: 报告错误、过期信息、失效链接或表达问题
+title: "[Content]: "
+labels: ["content"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 内容位置
+      description: 请提供文件路径、章节或链接。
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题说明
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 修正依据
+      description: 请优先提供官方资料或可复现实验。

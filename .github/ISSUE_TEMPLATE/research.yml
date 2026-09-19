@@ -1,0 +1,39 @@
+name: 研究任务
+description: 提议一个工具能力、原理或工作流研究
+title: "[Research]: "
+labels: ["research"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: 研究问题
+      description: 希望回答什么问题？
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: 价值与使用场景
+      description: 这个问题对谁有用，会影响什么决策？
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: 验证方法
+      description: 计划查阅哪些一手资料，如何设计可复现实验？
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: 预期产出
+      value: |
+        - [ ] 工具知识卡
+        - [ ] 实验记录
+        - [ ] 工作流或案例
+  - type: textarea
+    id: context
+    attributes:
+      label: 补充信息
+      description: 相关链接、环境、版本或其他背景。
