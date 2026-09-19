@@ -179,14 +179,12 @@ CI/CD 门禁与渐进发布
 - ChatGPT Project 组织 chats、files、instructions 和连接的 sources，本身不直接获得电脑本地目录访问。
 - Codex 是独立视图，历史与 ChatGPT 历史分开；本地项目的主文件夹用于 Git 操作以及自动发现 `AGENTS.md`、Skills 和 `.codex` 配置。
 
-因此，本案例后文的建议目录结构全部属于：
+因此，本案例后文会分别列出两类结构：
 
-```text
-Codex Project: tokens-store
-└── 主文件夹：本地 Git 仓库 tokens-store/
-```
+- **ChatGPT Project 逻辑结构**：Project instructions、Chats、Sources、Saved responses 和 Connected apps；它不是电脑文件目录。
+- **Codex Project 文件结构**：以本地 Git 仓库 `tokens-store/` 为根的真实目录树。
 
-它不属于 ChatGPT Project，也不要求在 ChatGPT Project 中建立相同目录。
+Issue、CI/CD、可观测性、密钥与权限、外部产品资料等系统也会列出各自的逻辑结构。它们不需要在 ChatGPT Project 或 Git 仓库中复制一套同名目录，而是通过统一标识符和链接衔接。
 
 ### 4.2 两个 Project 各自保存什么
 
@@ -671,7 +669,63 @@ Dashboard 不是展示品。每个告警必须关联负责人和 Runbook，每�
 
 自动化默认生成结构化报告或草稿任务。只有可逆、低风险并有确定性门禁的动作才允许自动执行。
 
-## 十三、建议目录结构（终态示意，无需创建）
+## 十三、建议系统结构（终态示意，无需创建）
+
+这里描述的是整个交付系统，不只是一棵本地目录树：
+
+```text
+tokens-store FDE 交付系统
+├── ChatGPT Project：tokens-store-product     # 产品发现、研究与决策上下文
+├── Codex Project：tokens-store               # 本地 Git 仓库与工程交付
+├── Issue / 项目管理系统                      # 工作状态、负责人和审批记录
+├── CI/CD 系统                                # 自动验证、构建、发布和回滚
+├── 生产可观测系统                            # 指标、日志、Trace、告警和审计
+├── 密钥、IAM 与策略系统                      # 凭据、身份、权限和轮换
+└── 外部产品事实系统                          # PRD、客户反馈、供应商资料和分析数据
+```
+
+只有 **Codex Project** 小节是真实文件目录。其他小节是各产品或系统中的逻辑内容结构，不要求在本地创建同名目录。
+
+### 13.1 ChatGPT Project：产品上下文的逻辑结构
+
+建议项目名：`tokens-store-product`。
+
+```text
+ChatGPT Project：tokens-store-product
+├── Project instructions
+│   ├── 项目目标、产品边界和角色定义
+│   ├── 事实、推断、建议的标注规则
+│   ├── 输出必须携带 DELIVERY 编号和来源
+│   └── 禁止写入密钥、个人数据和未脱敏生产数据
+├── Chats
+│   ├── [DISCOVERY][DELIVERY-023] 问题与用户证据
+│   ├── [DECISION][DELIVERY-023] 范围、规则与指标
+│   ├── [CONTRACT][DELIVERY-023] 交付契约草稿
+│   ├── [REVIEW][DELIVERY-023] 发布前产品复核
+│   ├── [OUTCOME][DELIVERY-023] 生产结果与偏差
+│   └── [INCIDENT][INC-xxx] 事故分析与后续决定
+├── Project sources
+│   ├── [SOURCE] PRD、研究报告和脱敏访谈材料
+│   ├── [REFERENCE] 术语表、产品规则和标准
+│   ├── [SNAPSHOT][DELIVERY-023] 已批准契约只读副本
+│   ├── [OUTCOME][DELIVERY-023] 交付结果摘要
+│   └── Saved responses：可复用摘要、决策记录和分析结果
+├── Connected apps / links
+│   ├── 产品文档系统
+│   ├── 客户反馈或沟通系统
+│   ├── Issue / 项目管理系统
+│   └── 指标与 Dashboard（优先只读）
+└── Project memory and sharing
+    ├── 按数据边界选择 project-only memory
+    ├── 按最小权限授予 chat 或 edit access
+    └── 定期复核成员、Sources 和失效材料
+```
+
+ChatGPT Project 当前并不提供上述文件夹层级；这里用前缀、编号和“一次结果一条 Chat”的方式形成可检索结构。Project source 是上下文副本或链接，不是权威 Git 文件，也不会自动与本地仓库同步。Google Drive、Slack 等连接能力受账号、工作区设置和应用支持范围约束。
+
+### 13.2 Codex Project：本地 Git 仓库的真实目录
+
+建议项目名：`tokens-store`；主文件夹就是 clone 后的本地 Git 仓库 `tokens-store/`。
 
 ```text
 tokens-store/
@@ -736,7 +790,134 @@ tokens-store/
 └── .github/                               # CI、PR 模板和安全门禁
 ```
 
-该目录树表达最终责任边界，不要求为了文档创建空目录或占位文件。真实仓库可合并或改名，但不能丢失对应职责。
+该目录树表达最终责任边界，不要求为了文档创建空目录或占位文件。真实仓库可按现有技术栈合并或改名，但不能丢失对应职责。
+
+### 13.3 Issue / 项目管理系统：交付状态结构
+
+```text
+Delivery board
+├── Backlog
+├── Discovery
+├── Contract review
+├── Ready
+├── In development
+├── PR review
+├── Canary
+├── Observed
+├── Done
+└── Rejected / Superseded
+
+每个交付项
+├── DELIVERY 编号与标题
+├── 问题、范围、成功指标和风险等级
+├── Owner、审批人和目标时间
+├── 权威契约、PR、Release、Dashboard 链接
+├── 当前门禁与阻塞项
+└── 结果、偏差和后续决定
+```
+
+Issue 系统负责状态，不复制完整契约正文。契约正文仍以 Git 中 `docs/product/delivery-contracts/` 的批准版本为准。
+
+### 13.4 CI/CD 系统：流水线结构
+
+```text
+Pull request pipeline
+├── 校验 DELIVERY 编号、契约链接和变更范围
+├── Format / Lint / Type check / Unit test
+├── Contract / Integration / E2E / Eval
+├── Security scan / Dependency scan / Secret scan
+├── SBOM / Provenance / Artifact build and sign
+└── Preview environment + 人工 Review
+
+Release pipeline
+├── Release candidate
+├── 数据迁移和回滚预检
+├── Canary 发布
+├── SLO、错误率、成本和业务指标门禁
+├── 分批扩量或自动停止
+├── Production 发布
+└── 发布验证、回滚记录和 Outcome 回写
+```
+
+### 13.5 生产可观测系统：运行事实结构
+
+```text
+Observability
+├── Dashboards
+│   ├── SLO / SLA
+│   ├── Provider 健康与配额
+│   ├── 路由质量、降级和回退
+│   ├── Token 用量、成本和毛利
+│   └── 安全、租户隔离和审计
+├── Alerts
+│   ├── Page：立即影响用户或安全
+│   ├── Ticket：需要排期修复
+│   └── Record：仅记录趋势
+├── Telemetry
+│   ├── Metrics
+│   ├── Logs（脱敏）
+│   ├── Traces
+│   └── Audit events
+└── Runbooks
+    ├── Provider 故障
+    ├── 路由异常
+    ├── 成本异常
+    ├── 凭据泄露或失效
+    └── 回滚与事故响应
+```
+
+### 13.6 密钥、IAM 与策略系统：安全控制结构
+
+```text
+Security control plane
+├── Secret vault
+│   ├── Provider credentials
+│   ├── Environment-scoped secrets
+│   └── Rotation and revocation
+├── Identities
+│   ├── Human accounts
+│   ├── Service accounts
+│   └── CI/CD identities
+├── Roles and policies
+│   ├── Development
+│   ├── Review and approval
+│   ├── Release
+│   └── Production break-glass
+└── Audit
+    ├── Access records
+    ├── Privilege changes
+    ├── Secret usage
+    └── Periodic access review
+```
+
+任何真实密钥都不得写入 ChatGPT Project、Codex 对话、Git 文档、Issue 或日志。上述位置只保存密钥引用、负责人、用途、轮换策略和审计链接。
+
+### 13.7 外部产品事实系统：原始资料结构
+
+```text
+External systems of record
+├── 产品文档：PRD、路线图、规则和定价
+├── 客户事实：访谈、工单、反馈和销售记录
+├── Provider 事实：官方文档、状态、配额和变更公告
+├── 经营分析：采用率、收入、成本和留存
+├── 事故与支持：Incident、Postmortem 和已知问题
+└── 合规资料：数据分类、合同、保留和审计要求
+```
+
+原始资料留在各自权威系统。ChatGPT Project 通过上传的脱敏副本、支持的应用链接或受控连接读取；批准后的工程结论进入 Git，不把全部原始资料搬进仓库。
+
+### 13.8 跨系统关联键
+
+| 标识符 | 作用 | 必须出现的位置 |
+| --- | --- | --- |
+| `DELIVERY-023` | 一次产品结果的主关联键 | ChatGPT Chat、Project source、Issue、Git 契约、分支/PR、Release、Dashboard 注释 |
+| Issue 编号 | 跟踪状态、Owner 和审批 | Git 契约、PR、Release |
+| PR / Commit | 定位实际工程变更 | Issue、交付契约结果、Release |
+| Release / Deployment ID | 定位已发布版本 | Git tag、CI/CD、Dashboard、Outcome 摘要 |
+| Trace / Correlation ID | 追踪单次运行 | 日志、Trace、事故记录；仅保存脱敏值 |
+| Incident ID | 关联生产事故与改进 | 监控、Issue、交付契约后续项、ChatGPT 复盘 Chat |
+
+完整链路应能从任一 `DELIVERY` 编号跳转到产品讨论、批准契约、工程改动、发布记录和生产结果。关联靠编号与链接，不靠 ChatGPT Project 和 Codex Project 自动同步。
 
 ## 十四、人工决策点
 

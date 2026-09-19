@@ -24,6 +24,7 @@
 
 ### Changed
 
+- 将 `tokens-store` 案例的建议结构从 Codex 本地目录扩展为完整系统结构，补齐 ChatGPT Project、Codex Project、Issue、CI/CD、可观测性、密钥与权限、外部事实源及跨系统关联键
 - 明确 FDE 案例中 ChatGPT Project 与 Codex Project 的职责、目录归属、非自动同步边界，以及交付契约从产品讨论进入 Git 并回流生产结果的完整衔接
 - 将 FDE 终态方案调整为“业界工程标准为骨架、OpenAI 官方产品能力为实现映射、项目约定为落地细则”，并接入 DORA、NIST SSDF、OWASP ASVS、SLSA、Google SRE、OpenTelemetry 和 OpenSSF 基线
 - 产品能力文档新增“入门用法 + 高阶用法”硬性结构，并在 ChatGPT Projects 与 Codex 主教程中先行应用
