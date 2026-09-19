@@ -15,3 +15,5 @@
 - 建立 Codex 桌面端功能地图及 Projects、worktree、工具、Git Review、AGENTS.md、Skills、Automations、多代理和权限专题
 - 增加 Chat、Work 与 Codex 选择指南，以及 Codex 桌面交付工作流与实战实验
 - 增加面向新用户的 Codex 桌面端从零到可审查交付主教程
+- 补充 ChatGPT Sites 的创建、托管、部署、权限和 Codex 协作边界
+- 增加可本地运行的 AI 工作流导航站，作为第一个 Sites 端到端真实案例

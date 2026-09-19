@@ -18,6 +18,7 @@ Codex 是面向代理式工作的桌面工作台：把项目文件、终端、Gi
 | Projects 与 Threads | 如何组织长期项目和单次成果 | [`projects-and-threads.md`](projects-and-threads.md) |
 | 本地、云端与 worktree | 工作在哪里运行，如何隔离变更 | [`environments-and-worktrees.md`](environments-and-worktrees.md) |
 | 文件、终端、浏览器与预览 | Agent 如何观察和操作真实环境 | [`tools-and-artifacts.md`](tools-and-artifacts.md) |
+| Sites 与部署 | 如何把本地项目变成托管网站 | [`ChatGPT Sites`](../chatgpt/sites.md) |
 | Git、Diff 与 Review | 如何检查、评论和交付变更 | [`git-and-review.md`](git-and-review.md) |
 | `AGENTS.md` | 如何保存项目级长期规则 | [`agents-md.md`](agents-md.md) |
 | Skills 与 Plugins | 如何复用和分发工作流 | [`skills-and-plugins.md`](skills-and-plugins.md) |

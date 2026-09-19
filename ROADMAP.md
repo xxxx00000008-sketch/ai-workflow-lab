@@ -16,6 +16,7 @@
 - [x] Browser
 - [x] Plugins
 - [x] Scheduled Tasks
+- [x] Sites
 - [x] Codex 桌面端功能地图
 - [x] Projects 与 Threads
 - [x] 本地、云端与 worktree
@@ -52,6 +53,7 @@
 - [ ] Codex 云端环境与本地环境一致性测试
 - [ ] 多 worktree 并行开发与合并冲突测试
 - [ ] Automation 失败、静默通知和恢复测试
+- [ ] Sites 保存、生产部署、权限与持久化数据测试
 - [ ] 发布 `v0.1.0` 版本及变更说明
 
 ## 后续方向

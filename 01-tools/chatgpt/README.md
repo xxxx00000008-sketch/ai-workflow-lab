@@ -14,6 +14,7 @@
 | Browser | 如何在网页中研究、验证和操作 | [`browser.md`](browser.md) | 第一轮完成 |
 | Plugins | 如何连接工具并复用工作流 | [`plugins.md`](plugins.md) | 第一轮完成 |
 | Scheduled | 如何定期运行、监控和提醒 | [`tasks.md`](tasks.md) | 第一轮完成 |
+| Sites | 如何创建、托管和分享网站或轻量应用 | [`sites.md`](sites.md) | 第一轮完成 |
 | Codex | 何时切换到本地工程代理 | [`codex.md`](codex.md) | 第一轮完成 |
 
 ## 快速选择
@@ -23,5 +24,6 @@
 - 明确交付物、涉及多个来源或工具：使用 **Work**。
 - 需要本地仓库、终端、Git 和测试：使用 **Codex**。
 - 需要周期性重复：使用 **Scheduled** 或 Codex Automation。
+- 需要快速创建并托管网站或轻量应用：使用 **Sites**。
 
 完整边界见 [`Chat、Work 与 Codex 选择指南`](../../05-comparisons/chat-work-codex.md)。
