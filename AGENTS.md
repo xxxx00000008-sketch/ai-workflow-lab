@@ -13,6 +13,8 @@ This repository is a Chinese-first, evidence-based lab for turning current AI pr
 - Never commit secrets, personal data, private conversations, or unredacted account screenshots.
 - Use lowercase kebab-case filenames and relative Markdown links.
 - For a new feature study, pair a knowledge card in `01-tools/` with evidence in `07-experiments/` when possible.
+- Every product capability guide must contain explicit beginner and advanced usage sections. Beginner usage gives the shortest complete first task; advanced usage covers composition, reusable rules, automation, review, permissions, cost, and recovery where relevant.
+- Do not call a longer prompt “advanced usage.” Advanced guidance must change the workflow, reuse, control, or automation level.
 - Classify content as an official capability note, experiment, workflow, case, or reusable asset. Do not present a proposal or unexecuted procedure as a verified result.
 - Deliver each real case as one self-contained Markdown document with prerequisites, concrete automation steps, inputs and outputs for each step, human approval points, expected results, limits, and an illustrative directory tree.
 - Do not create the files shown in a case's illustrative directory tree unless the user explicitly requests an implementation. Label unexecuted cases as unverified and reserve verified status for executed cases.
