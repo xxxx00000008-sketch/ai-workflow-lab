@@ -24,6 +24,8 @@
 
 ### Changed
 
+- 明确 FDE 案例中 ChatGPT Project 与 Codex Project 的职责、目录归属、非自动同步边界，以及交付契约从产品讨论进入 Git 并回流生产结果的完整衔接
+- 将 FDE 终态方案调整为“业界工程标准为骨架、OpenAI 官方产品能力为实现映射、项目约定为落地细则”，并接入 DORA、NIST SSDF、OWASP ASVS、SLSA、Google SRE、OpenTelemetry 和 OpenSSF 基线
 - 产品能力文档新增“入门用法 + 高阶用法”硬性结构，并在 ChatGPT Projects 与 Codex 主教程中先行应用
 - 将真实案例交付形式调整为单个 Markdown：写清自动化步骤并展示建议目录树，不再要求创建目录树中的示例文件
 - 将路线图从功能覆盖调整为“能力基线 + 真实工作流验证”，避免把文档完成等同于行为实测

@@ -40,6 +40,25 @@ CI/CD 门禁与渐进发布
 
 这与 OpenAI 对 FDE 的定义一致：FDE 负责 discovery、technical scoping、system design、build 和 production rollout，并以生产采用、可测量工作流影响和 eval 驱动反馈衡量结果。
 
+### 1.1 方案依据的优先级
+
+本方案不把 OpenAI 产品文档当作软件工程规范。依据分为三层：
+
+| 层级 | 决定什么 | 采用的依据 |
+| --- | --- | --- |
+| 业界工程规范 | 安全研发、交付性能、可靠性、供应链和可观测性应该达到什么标准 | DORA、NIST SSDF、OWASP ASVS、SLSA、Google SRE、OpenTelemetry、OpenSSF |
+| 产品能力 | ChatGPT、Work、Codex、MCP、Skills、worktree 和计划任务当前可以怎样组合 | 当前 OpenAI 官方产品文档和实际账号验证 |
+| 项目约定 | `tokens-store` 如何命名、分级、审批、组织文档和执行任务 | 本项目根据业务风险制定并版本化 |
+
+发生冲突时：
+
+1. 法律、合规和组织安全政策优先。
+2. 业界标准决定最低工程要求。
+3. OpenAI Docs 只用于确认产品能力、限制和操作入口。
+4. 项目约定可以比行业基线更严格，不能用产品便利性降低安全和质量门槛。
+
+本文中的“交付契约”、`DELIVERY-<编号>`、R0–R3 风险等级和 Skill 名称是本方案的项目约定，不是 OpenAI 或通用行业标准。
+
 ## 二、当前模式的问题
 
 当前链路大致是：
@@ -71,7 +90,7 @@ CI/CD 门禁与渐进发布
 │ ChatGPT Project + 连接器/MCP                              │
 │ 需求发现、冲突整理、术语统一、价值指标、产品决策           │
 │                         ↓ 人工批准                         │
-│ 仓库内 Canonical Delivery Contract                        │
+│ 仓库内已批准交付契约（Delivery Contract）                  │
 └──────────────────────────┬───────────────────────────────┘
                            ↓
 ┌──────────────────── 工程控制面 ──────────────────────────┐
@@ -111,23 +130,204 @@ CI/CD 门禁与渐进发布
 | CI/CD | 执行确定性验证和发布策略 | 不替代人工业务验收 |
 | 可观测系统 | 保存生产行为、SLO、成本和告警事实 | 不用未经脱敏的数据训练提示或模型 |
 
-## 四、产品事实系统
+### 行业规范落地矩阵
 
-### 4.1 原始资料与执行契约分离
+| 领域 | 采用基线 | 在 `tokens-store` 中的落点 |
+| --- | --- | --- |
+| 交付性能 | DORA 当前五指标 | Change lead time、Deployment frequency、Failed deployment recovery time、Change fail rate、Deployment rework rate |
+| 可靠性 | Google SRE | 面向用户的 SLI/SLO、Error Budget、Canary、停止条件和回滚策略 |
+| 安全研发 | NIST SSDF 1.1 | 保护代码和环境、生成安全软件、响应漏洞、保存可审计证据 |
+| 应用安全 | OWASP ASVS 5.0.0 | 按风险选择并引用带版本的安全验收要求，不使用模糊的“已做安全检查” |
+| 软件供应链 | SLSA 1.2 | 受保护源码、可追溯构建、Provenance、制品验证和逐级提升保证 |
+| 可观测性 | OpenTelemetry | traces、metrics、logs、profiles 和 resources 使用统一语义及关联标识 |
+| 仓库安全卫生 | OpenSSF Scorecard | 分支保护、依赖更新、固定依赖、危险工作流和安全政策检查 |
 
-产品文档可以继续存在于多个系统，但代码实现只能依据一个经过批准的 **Canonical Delivery Contract（交付契约）**。
+终态必须为每个领域明确采用版本、目标等级、适用控制和验证证据。与实际威胁模型无关的控制可以不采用，但必须记录理由；不能用“项目规模小”作为跳过安全、供应链、可靠性或可观测性基线的理由。
+
+### ChatGPT 与 Codex 产品能力映射
+
+| 工作环节 | 建议产品能力 | 作用 | 权威产物在哪里 |
+| --- | --- | --- | --- |
+| 长期产品上下文 | ChatGPT Project | 保存产品指令、相关对话、上传资料和连接来源 | 原始资料仍归原系统；批准前分析留在 Project |
+| 当前公开信息 | Search / Deep Research（账号支持时） | 查询供应商、标准、市场和外部证据 | 交付契约记录实际采用的来源与日期 |
+| 结构化产品产物 | ChatGPT Work（账号和 Project 设置支持时） | 生成或编辑需求简报、报告、表格和评审材料 | 批准后的工程输入必须写入 Git |
+| 外部业务上下文 | Apps / Connectors / MCP | 受控读取产品文档、Issue、客户反馈和监控 | 外部系统保持原始事实；Git 保存批准结论 |
+| 本地工程交付 | Codex Project | 读取仓库、修改代码、运行命令、测试、Diff 和 Git | `tokens-store` Git 仓库 |
+| 并行隔离 | Codex worktree | 每个独立结果使用隔离 checkout | 对应分支、Commit 和 PR |
+| 持久工程规则 | `AGENTS.md` / `.codex/config.toml` | 自动加载仓库规则和受控配置 | Git 仓库 |
+| 标准作业程序 | Skills | 封装单一职责、可复用的工程方法 | 仓库 `.agents/skills/` |
+| 周期工作 | Scheduled Tasks / Automation | 执行稳定的检查、汇总和监控 | 任务结果回到 Issue、Git 或监控系统 |
+| 人工验收 | Diff / Review / Browser / Preview | 检查真实变更和实际运行结果 | Review 记录、测试证据和生产指标 |
+
+产品组合原则：ChatGPT负责发现和决策上下文，Codex负责本地工程交付；Git保存批准后的工程事实，生产可观测系统保存运行事实。任何产品中的对话历史都不充当最终系统记录。
+
+## 四、ChatGPT Project 与 Codex Project 如何衔接
+
+### 4.1 先区分两个 Project
+
+建议建立两个逻辑上相关、物理上独立的 Project：
+
+| 项目 | 建议名称 | 实际载体 | 负责什么 |
+| --- | --- | --- | --- |
+| ChatGPT Project | `tokens-store-product` | ChatGPT 中的云端项目空间 | 产品研究、原始资料、客户反馈、讨论、指标定义和交付契约草稿 |
+| Codex Project | `tokens-store` | ChatGPT 桌面端连接的本地 Git 仓库 | 正式交付契约、代码、测试、Git、CI/CD 配置、运行文档和可审查变更 |
+
+两者不是同一个 Project 的两个视图，也不会因为名称相同自动关联。
+
+根据当前官方说明：
+
+- ChatGPT Project 组织 chats、files、instructions 和连接的 sources，本身不直接获得电脑本地目录访问。
+- Codex 是独立视图，历史与 ChatGPT 历史分开；本地项目的主文件夹用于 Git 操作以及自动发现 `AGENTS.md`、Skills 和 `.codex` 配置。
+
+因此，本案例后文的建议目录结构全部属于：
+
+```text
+Codex Project: tokens-store
+└── 主文件夹：本地 Git 仓库 tokens-store/
+```
+
+它不属于 ChatGPT Project，也不要求在 ChatGPT Project 中建立相同目录。
+
+### 4.2 两个 Project 各自保存什么
+
+```text
+ChatGPT Project: tokens-store-product
+├── Project instructions              # 产品研究、表达和决策规则
+├── Chats                             # 需求发现、访谈分析、方案讨论
+├── Sources                           # 上传资料、原始文档、已保存回答
+└── Connected sources                 # 获准访问的 Drive、Slack 等来源
+
+                 人工批准 + 受控交接
+                           ↓
+
+Codex Project: tokens-store
+└── tokens-store/                      # 本地 Git 仓库，也是建议目录树的根
+    ├── AGENTS.md
+    ├── docs/product/delivery-contracts/
+    ├── contracts/
+    ├── tests/
+    ├── src/
+    └── ...
+```
+
+ChatGPT Project 中的 Sources 是项目上下文，不是 Git 文件目录。即使把同一份 Markdown 上传到 ChatGPT Project，也只是一个独立副本，不应假定它会随仓库修改自动更新。
+
+### 4.3 唯一权威版本放在哪里
+
+不同信息有不同权威位置：
+
+| 信息 | 权威位置 |
+| --- | --- |
+| 原始 PRD、客户访谈、聊天和外部资料 | 原始产品系统；ChatGPT Project 保存链接、上传副本或分析上下文 |
+| 尚未批准的需求分析和方案 | ChatGPT Project 对话 |
+| 已批准的交付契约 | `tokens-store/docs/product/delivery-contracts/DELIVERY-<编号>.md` |
+| 架构决定 | `tokens-store/docs/architecture/adr/` |
+| API、事件和 Provider 契约 | `tokens-store/contracts/` |
+| 代码、测试和部署配置 | `tokens-store` Git 仓库 |
+| 任务状态 | Issue/项目管理系统 |
+| 生产行为 | 日志、指标、Trace、告警和审计系统 |
+
+交付契约一旦批准并进入 Git，Git 中的版本就是本次工程交付的唯一权威版本。ChatGPT Project 中的草稿或上传副本不得覆盖它。
+
+### 4.4 从 ChatGPT Project 交接给 Codex Project
+
+每次功能交接执行以下步骤：
+
+1. 在 `tokens-store-product` 中读取原始资料，完成问题、范围、产品规则、验收示例、指标、风险、发布和回滚分析。
+2. ChatGPT 输出一份带唯一编号的交付契约草稿，例如 `DELIVERY-023`。
+3. 产品负责人/FDE 人工确认冲突、范围、指标和风险等级，并将状态改为“已批准”。
+4. 打开 Codex Project `tokens-store`，新建一个只负责接收契约的任务。
+5. 把已批准契约完整交给 Codex，要求写入 `docs/product/delivery-contracts/DELIVERY-023.md`，此时不修改业务代码。
+6. 人工审查 Diff，确认 Git 文件与批准内容一致后提交。
+7. 后续功能开发任务只引用仓库中的 `DELIVERY-023.md`，不再引用一整段 ChatGPT 对话。
+
+交接提示示例：
+
+```text
+任务：登记已批准交付契约，不实现功能。
+
+契约编号：DELIVERY-023
+目标路径：docs/product/delivery-contracts/DELIVERY-023.md
+批准状态：已批准
+批准人：<负责人>
+批准日期：<日期>
+
+要求：
+1. 读取 AGENTS.md；
+2. 将下方契约原样整理为仓库 Markdown；
+3. 检查编号、来源链接、风险等级和验收示例是否完整；
+4. 不修改 src、tests、配置或依赖；
+5. 完成后只返回 Diff 和缺失字段。
+
+<已批准契约正文>
+```
+
+这一步把“对话里的决定”转换为“Git 中可追踪的工程输入”。
+
+### 4.5 从 Codex Project 回流到 ChatGPT Project
+
+代码交付后不要复制整个 Codex 任务历史。Codex 应先在仓库中更新交付契约的结果部分：
+
+- PR、Commit 和发布版本
+- 实际实现范围及偏差
+- 测试和 Eval 结果
+- 灰度与生产指标
+- 已知限制和后续决策
+
+然后生成一份简短回流摘要：
+
+```text
+交付编号：DELIVERY-023
+状态：已发布 / 已回滚 / 未达到目标
+实现链接：<PR 或 Commit>
+生产结果：<指标与观察周期>
+与原计划偏差：<内容>
+需要产品决定：<问题>
+仓库权威文件：docs/product/delivery-contracts/DELIVERY-023.md
+```
+
+把这份摘要保存到 `tokens-store-product` 的对应对话或 Project Source，供下一轮产品分析使用。如果账号和权限允许通过连接器/MCP读取 Git、Issue 或监控数据，可以自动获取最新状态；否则由人复制摘要。无论采用哪种方式，都不改变 Git 和生产监控分别作为工程事实、运行事实权威来源的原则。
+
+### 4.6 完整衔接生命周期
+
+| 状态 | 工作位置 | 输出 | 下一步入口 |
+| --- | --- | --- | --- |
+| 原始资料 | 产品系统、ChatGPT Project | 来源清单和问题 | ChatGPT 产品分析对话 |
+| Draft | ChatGPT Project | 交付契约草稿 | 人工产品审批 |
+| Approved | ChatGPT Project → Codex Project | 已批准契约内容 | Codex 写入 Git |
+| Recorded | Git 仓库 | `DELIVERY-<编号>.md` | Codex 工程计划 |
+| In development | Codex worktree | 代码、测试和 PR | CI 与人工 Review |
+| Released | Git、CI/CD | 版本、发布与回滚记录 | 生产观察 |
+| Observed | 监控系统、Git | SLO、成本、采用和偏差 | 回流 ChatGPT Project |
+| Superseded | Git、产品系统 | 新契约编号和替代关系 | 下一轮交付 |
+
+### 4.7 明确不会自动发生的事情
+
+- ChatGPT Project 不会自动读取本地 `tokens-store` 的最新文件。
+- Codex Project 不会自动继承 ChatGPT Project 的对话、Sources 或 Project instructions。
+- 上传到 ChatGPT Project 的仓库文件不会与 Git 双向同步。
+- Codex 完成代码任务后，不会自动把产品结论写回 ChatGPT Project。
+- 两个 Project 使用相同名称，不会建立关联。
+
+两者的稳定关联键不是名称，而是 `DELIVERY-<编号>`、Git 路径、Issue、PR 和发布版本。
+
+## 五、产品事实系统
+
+### 5.1 原始资料与执行契约分离
+
+产品文档可以继续存在于多个系统，但代码实现只能依据一份经过批准并写入 Git 的 **交付契约（Delivery Contract）**。
 
 ```text
 原始 PRD、聊天、截图、工单、客户反馈
                ↓ 汇总、去重、发现冲突
-      Canonical Delivery Contract
+          已批准交付契约
                ↓ 人工批准
        Codex 可以开始工程计划
 ```
 
 原始资料是证据，交付契约是本次实现的权威输入。冲突内容不能由 Codex 自行选择。
 
-### 4.2 每份交付契约必须包含
+### 5.2 每份交付契约必须包含
 
 ```markdown
 # DELIVERY-<编号>：标题
@@ -163,7 +363,7 @@ R0 / R1 / R2 / R3，并说明理由。
 原始资料链接、负责人、批准时间和关键取舍。
 ```
 
-### 4.3 文档冲突治理
+### 5.3 文档冲突治理
 
 每个产品资料条目至少记录：编号、来源、所有者、日期、状态、影响模块和权威级别。
 
@@ -175,7 +375,7 @@ R0 / R1 / R2 / R3，并说明理由。
 4. 决定写入交付契约；架构性取舍同时写入 ADR。
 5. 被替代资料标注状态，不删除历史证据。
 
-## 五、Token 平台必须显式建模的领域
+## 六、Token 平台必须显式建模的领域
 
 以下是终态能力地图，不代表 `tokens-store` 当前一定采用这些模块。第一次仓库调查要把真实代码映射到这些领域：
 
@@ -194,7 +394,7 @@ R0 / R1 / R2 / R3，并说明理由。
 
 任何功能都必须说明影响了哪些领域。跨越 Credential、Usage Ledger、Access Control 或生产路由的改动自动进入最高风险流程。
 
-## 六、风险分级与自动化权限
+## 七、风险分级与自动化权限
 
 | 级别 | 典型变更 | Codex 可以做 | 必须人工批准 |
 | --- | --- | --- | --- |
@@ -211,9 +411,9 @@ R0 / R1 / R2 / R3，并说明理由。
 - 日志、测试夹具、截图和错误报告必须脱敏。
 - 不允许仅凭模型总结跳过 Diff、测试结果和生产指标。
 
-## 七、Codex 工程控制面
+## 八、Codex 工程控制面
 
-### 7.1 `AGENTS.md` 分层
+### 8.1 `AGENTS.md` 分层
 
 根目录保存全仓库规则：
 
@@ -227,13 +427,13 @@ R0 / R1 / R2 / R3，并说明理由。
 
 领域目录仅在规则确实不同时增加更具体的 `AGENTS.md` 或覆盖文件，例如 Provider Adapter、计费或权限模块。根文件保持简短，将详细标准链接到专用文档。
 
-### 7.2 项目配置
+### 8.2 项目配置
 
 仓库级 `.codex/config.toml` 保存团队一致的 Codex 行为，例如批准策略、沙箱、MCP 和多代理配置；个人偏好保存在个人配置中，不写入仓库。
 
 Codex Project 的主文件夹必须是 `tokens-store` Git 根目录，以保证 Git 操作以及 `AGENTS.md`、Skills 和配置的自动发现以正确目录为基准。
 
-### 7.3 Skills 是标准作业程序
+### 8.3 Skills 是标准作业程序
 
 终态是一组单一职责、输入输出明确的工程作业程序：
 
@@ -251,7 +451,7 @@ Codex Project 的主文件夹必须是 `tokens-store` Git 根目录，以保证 
 
 每个 Skill 只负责一个稳定任务；方法放在 Skill，长期约束放在 `AGENTS.md`，本次目标放在交付契约。
 
-### 7.4 MCP 是受控上下文通道
+### 8.4 MCP 是受控上下文通道
 
 当产品资料、Issue、GitHub、监控或日志在仓库外时，通过受控连接器或 MCP 获取当前数据，避免人工复制过期内容。
 
@@ -265,9 +465,9 @@ Codex Project 的主文件夹必须是 `tokens-store` Git 根目录，以保证 
 
 不能因为“终态自动化”就给 Codex 全组织、全生产或永久写权限。
 
-## 八、一个需求的终态交付流程
+## 九、一个需求的终态交付流程
 
-### 8.1 Discovery
+### 9.1 Discovery
 
 FDE 使用 ChatGPT Project 聚合产品资料、客户反馈、事故、指标和工程限制，回答：
 
@@ -279,7 +479,7 @@ FDE 使用 ChatGPT Project 聚合产品资料、客户反馈、事故、指标�
 
 输出不是代码任务，而是待批准的交付契约。
 
-### 8.2 Readiness Gate
+### 9.2 Readiness Gate
 
 只有满足以下条件才能进入 Codex 实现：
 
@@ -292,7 +492,7 @@ FDE 使用 ChatGPT Project 聚合产品资料、客户反馈、事故、指标�
 
 不满足时，任务状态是 `blocked-by-contract`，而不是让 Codex 边猜边写。
 
-### 8.3 Engineering Plan
+### 9.3 Engineering Plan
 
 在 Codex 中为该交付契约创建一个独立任务和 worktree，先进入 Plan：
 
@@ -313,7 +513,7 @@ FDE 使用 ChatGPT Project 聚合产品资料、客户反馈、事故、指标�
 
 R2/R3 计划需要产品和安全/架构责任人共同批准。
 
-### 8.4 有界并行实现
+### 9.4 有界并行实现
 
 主任务负责契约、架构一致性和最终整合。仅把相互独立的工作交给子代理，例如：
 
@@ -325,7 +525,7 @@ R2/R3 计划需要产品和安全/架构责任人共同批准。
 
 禁止多个代理同时修改同一核心文件；禁止把产品决策分散给子代理。每个子任务必须返回证据，主任务统一审查。
 
-### 8.5 验证矩阵
+### 9.5 验证矩阵
 
 | 变更类型 | 必须通过的验证 |
 | --- | --- |
@@ -340,7 +540,7 @@ R2/R3 计划需要产品和安全/架构责任人共同批准。
 
 确定性检查由 CI 执行。Codex 可生成和运行测试、做自审与安全审查，但不能用自然语言声称代替测试产物。
 
-### 8.6 PR Gate
+### 9.6 PR Gate
 
 PR 必须自动关联：
 
@@ -354,7 +554,7 @@ PR 必须自动关联：
 
 CI 失败、契约缺失、R2/R3 审批缺失、Secret Scan 命中或回滚不可行时禁止合并。
 
-### 8.7 渐进发布
+### 9.7 渐进发布
 
 ```text
 Preview / Sandbox
@@ -370,7 +570,7 @@ Preview / Sandbox
 
 每一级都要定义观察时间、通过阈值和自动/人工停止条件。R2/R3 必须能够通过 Feature Flag、配置版本或发布版本快速回滚。
 
-### 8.8 Production Acceptance
+### 9.8 Production Acceptance
 
 功能只有同时满足以下条件才算完成：
 
@@ -383,7 +583,7 @@ Preview / Sandbox
 
 如果代码正确但无人使用，或业务指标没有改善，FDE 任务仍未完成。
 
-## 九、Bug 与事故的统一闭环
+## 十、Bug 与事故的统一闭环
 
 ```text
 告警 / 用户反馈
@@ -407,7 +607,7 @@ Bug 修复任务必须包含：期望与实际行为、环境、首次发生时�
 
 严重事故中，优先恢复服务和保护数据；Codex 可以调查、整理时间线和提出操作，但生产切流、凭据轮换、数据修改和删除必须由授权人员批准。
 
-## 十、运行时可观测与 Eval 系统
+## 十一、运行时可观测与 Eval 系统
 
 ### 技术 SLO
 
@@ -435,15 +635,20 @@ Bug 修复任务必须包含：期望与实际行为、环境、首次发生时�
 ### FDE 交付指标
 
 - Time to First Value：从批准契约到首批用户获得价值
-- Lead Time：从 Ready 到生产验收
-- Deployment Frequency、Change Failure Rate、MTTR
+- Change lead time：从代码提交到成功运行于生产环境
+- Deployment frequency：给定周期内的生产部署次数或部署间隔
+- Failed deployment recovery time：失败部署发生后恢复服务所需时间
+- Change fail rate：需要立即修复、回滚或干预的部署比例
+- Deployment rework rate：因生产问题产生的非计划修复部署比例
 - Eval 通过率和生产逃逸缺陷
 - 需求到代码、测试、部署和指标的追溯完整率
 - 人工介入次数及其真正避免的风险
 
+一般事故的 MTTR 可以继续作为运维指标，但不能替代 DORA 当前定义的 Failed deployment recovery time。
+
 Dashboard 不是展示品。每个告警必须关联负责人和 Runbook，每个交付契约必须声明上线后观察哪些指标。
 
-## 十一、持续自动化
+## 十二、持续自动化
 
 ### 事件驱动自动化
 
@@ -466,7 +671,7 @@ Dashboard 不是展示品。每个告警必须关联负责人和 Runbook，每�
 
 自动化默认生成结构化报告或草稿任务。只有可逆、低风险并有确定性门禁的动作才允许自动执行。
 
-## 十二、建议目录结构（终态示意，无需创建）
+## 十三、建议目录结构（终态示意，无需创建）
 
 ```text
 tokens-store/
@@ -533,7 +738,7 @@ tokens-store/
 
 该目录树表达最终责任边界，不要求为了文档创建空目录或占位文件。真实仓库可合并或改名，但不能丢失对应职责。
 
-## 十三、人工决策点
+## 十四、人工决策点
 
 无论自动化程度多高，以下事项保持人工责任：
 
@@ -547,7 +752,7 @@ tokens-store/
 
 Codex 提供证据、选项和执行能力；FDE 对结果、权衡和生产影响负责。
 
-## 十四、终态验收标准
+## 十五、终态验收标准
 
 只有同时满足以下条件，`tokens-store` 才达到本方案定义的终态：
 
@@ -562,16 +767,32 @@ Codex 提供证据、选项和执行能力；FDE 对结果、权衡和生产影�
 9. 功能完成以生产采用和可测量价值为准，而不是以代码合并为准。
 10. 新 Provider、新路由策略和常见 Bug 能通过标准流程重复交付。
 
-## 十五、适用限制
+## 十六、适用限制
 
 - 本文是 FDE 目标操作系统，不是对 `tokens-store` 当前架构的事实描述。
 - 尚未读取真实代码、CI、部署、监控、产品资料和组织权限，因此状态保持“未验证”。
 - Provider、计费和租户模型需根据真实业务删除或调整，不能直接照搬名称。
 - Codex Security、云端 Review、MCP 和计划任务的可用性取决于账号、工作区、平台和权限；启用前需按当前官方文档及实际环境核验。
 
-## 官方依据
+## 依据与来源
+
+### 业界标准与实践
+
+- [DORA software delivery performance metrics](https://dora.dev/guides/dora-metrics/)：当前五指标模型，覆盖交付吞吐和不稳定性。
+- [NIST SSDF 1.1](https://csrc.nist.gov/pubs/sp/800/218/final)：将安全开发实践集成进 SDLC，减少漏洞并处理根因。
+- [OWASP ASVS](https://owasp.org/projects/asvs)：当前稳定版 5.0.0，为应用安全技术控制提供可引用的验证要求。
+- [SLSA 1.2](https://slsa.dev/spec/v1.2/)：源码、构建、Provenance 和制品验证的供应链安全规范。
+- [Google SRE — Service Level Objectives](https://sre.google/sre-book/service-level-objectives/)：从用户关心的行为定义 SLI、SLO 和 Error Budget。
+- [Google SRE — Canarying Releases](https://sre.google/workbook/canarying-releases/)：通过受限流量和观察窗口降低发布风险。
+- [OpenTelemetry Semantic Conventions](https://opentelemetry.io/docs/concepts/semantic-conventions/)：统一 traces、metrics、logs、profiles 和 resources 的命名与语义。
+- [OpenSSF Scorecard](https://openssf.org/scorecard/)：自动检查仓库和开源供应链的安全实践。
+
+### ChatGPT 与 Codex 产品能力
 
 - [OpenAI Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-seoul-seoul-south-korea/)：FDE 端到端负责发现、范围、系统设计、构建、生产发布、采用和可测量影响。
+- [Projects in ChatGPT](https://help.openai.com/en/articles/10169521-using-projects-in-chatgpt)：ChatGPT Project 组织 chats、files、instructions 和连接来源。
+- [ChatGPT Work and Codex](https://help.openai.com/en/articles/20001275/)：Work 面向知识工作交付物，Codex 面向本地仓库、代码、测试和开发工具；两者入口与历史边界不同。
+- [Codex Projects](https://developers.openai.com/docs/projects)：本地项目主文件夹以及 `AGENTS.md`、Skills、配置和 Git 的发现边界。
 - [Codex 最佳实践](https://developers.openai.com/guides/best-practices)：使用明确上下文、`AGENTS.md`、测试与审查、MCP、Skills、计划任务、worktree 和有界多代理建立稳定工程系统。
 - [Codex as a platform](https://developers.openai.com/blog/codex-as-a-platform)：Agent 系统需要上下文、工具、失败处理、审批、状态和结果回传，而不只是提示词与模型回答。
 - [Codex Worktrees](https://developers.openai.com/zh-Hans/docs/environments/git-worktrees)：同一仓库中的隔离并行任务和 Local/Worktree 移交。
