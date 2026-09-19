@@ -28,6 +28,7 @@
 - [x] 多代理与任务协调
 - [x] 权限与安全
 - [x] Codex 桌面端从零到交付主教程
+- [x] ChatGPT Project + Codex Project 实际工作提效手册
 
 ### 第一轮文档完成标准
 

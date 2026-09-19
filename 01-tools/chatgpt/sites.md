@@ -141,10 +141,6 @@ Sites 是从“内容”走向“可交互产品”的低门槛路径。对于�
 - 访问控制、持久化数据库、文件存储和删除行为。
 - 从 Codex 修改本地源码后，Sites 更新和回滚的实际流程。
 
-## 真实案例
-
-仓库已提供一个无需安装依赖即可运行的 [`AI 工作流导航站`](../../04-cases/sites-ai-workflow-navigator/)。它包含真实需求、交互源码、验收步骤和发布边界，而不只是一段功能说明。
-
 ## 官方来源
 
 1. [Sites — ChatGPT Learn](https://learn.chatgpt.com/pt-BR/docs/sites)，访问于 2026-09-19。

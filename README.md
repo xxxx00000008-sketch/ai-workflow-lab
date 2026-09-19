@@ -29,6 +29,8 @@
 
 详细范围与验收标准见 [`ROADMAP.md`](ROADMAP.md)。从 [`ChatGPT 功能地图`](01-tools/chatgpt/) 或 [`Codex 桌面端地图`](01-tools/codex/) 开始，也可以直接查看 [`Chat、Work 与 Codex 选择指南`](05-comparisons/chat-work-codex.md)。
 
+如果你更关心“实际工作中怎么提效”，直接阅读 [`ChatGPT + Codex 实际工作提效手册`](03-workflows/chatgpt-codex-productivity-playbook.md)。主线是 **ChatGPT Project 负责研究、思考和写作，Codex Project 负责本地文件、验证、Git 和自动化**，并按研究、会议、开发、写作和周报场景比较传统做法、AI 协作和自动化流程。
+
 ## 参与贡献
 
 欢迎通过 Issue 提交问题、实验想法或勘误。涉及内容变更时，请先阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)，并尽量使用仓库内的模板保留可复核证据。
