@@ -10,3 +10,4 @@
 - 定义 V0.1 ChatGPT Deep Dive 路线与完成标准
 - 增加贡献规范、行为准则以及 Issue/PR 模板
 - 创建 ChatGPT Projects 首个研究入口
+- 完成 ChatGPT Projects 第一轮研究闭环：知识卡、真实交接实验、生命周期工作流与案例

@@ -8,7 +8,7 @@
 
 ### 研究顺序
 
-- [ ] Projects
+- [x] Projects
 - [ ] Memory
 - [ ] Library
 - [ ] Search
