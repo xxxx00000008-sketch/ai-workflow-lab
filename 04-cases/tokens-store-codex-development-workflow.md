@@ -2,6 +2,8 @@
 
 > 状态：目标架构，未在 `tokens-store` 真实仓库验证
 >
+> 项目角色：FDE 目标架构参考；首个端到端验证案例已调整为 [`差价 AI`](chajia-ai-end-to-end-validation.md)
+>
 > 编写日期：2026-09-19
 >
 > 适用环境：Token 聚合平台、Git 仓库、ChatGPT Project、Codex Project、CI/CD、生产监控系统
