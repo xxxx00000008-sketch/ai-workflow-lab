@@ -17,6 +17,8 @@ This repository is a Chinese-first, evidence-based lab for turning current AI pr
 - Do not call a longer prompt “advanced usage.” Advanced guidance must change the workflow, reuse, control, or automation level.
 - Classify content as an official capability note, experiment, workflow, case, or reusable asset. Do not present a proposal or unexecuted procedure as a verified result.
 - Deliver each real case as one self-contained Markdown document with prerequisites, concrete automation steps, inputs and outputs for each step, human approval points, expected results, limits, and an illustrative directory tree.
+- Treat this repository as an AI-native delivery operating system. Every workflow must identify the AI execution role, the human control point, the authoritative source of truth, and what evidence feeds back into the system.
+- Write beginner entry points without assuming prior knowledge of Git, ChatGPT Projects, Work, Codex, testing, preview environments, delivery contracts, or release workflows.
 - Do not create the files shown in a case's illustrative directory tree unless the user explicitly requests an implementation. Label unexecuted cases as unverified and reserve verified status for executed cases.
 - Compare traditional work, one-off AI assistance, standardized workflow, and automation when the comparison is meaningful.
 - Treat ChatGPT Project + Codex Project as one composition pattern, not the universal project architecture.

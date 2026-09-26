@@ -5,3 +5,5 @@
 - [`chatgpt-codex-productivity-playbook.md`](chatgpt-codex-productivity-playbook.md) — 多场景初版手册，比较传统、AI 协作与自动化工作方式
 - [`chatgpt-project-lifecycle.md`](chatgpt-project-lifecycle.md) — 长期 Project 生命周期
 - [`codex-desktop-delivery.md`](codex-desktop-delivery.md) — Codex 从任务到 Git 交付
+- [`project-delivery-operating-system.md`](project-delivery-operating-system.md) — 新成员从第一步到复盘的项目交付主流程
+- [`online-mvp-delivery.md`](online-mvp-delivery.md) — 以企业微信、ChatGPT Project 与代码仓库协同的一周线上 MVP 交付法
