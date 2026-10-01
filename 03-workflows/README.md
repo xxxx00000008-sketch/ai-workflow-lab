@@ -6,4 +6,5 @@
 - [`chatgpt-project-lifecycle.md`](chatgpt-project-lifecycle.md) — 长期 Project 生命周期
 - [`codex-desktop-delivery.md`](codex-desktop-delivery.md) — Codex 从任务到 Git 交付
 - [`project-delivery-operating-system.md`](project-delivery-operating-system.md) — 新成员从第一步到复盘的项目交付主流程
+- [`spec-plan-tasks-compilation.md`](spec-plan-tasks-compilation.md) — OpenSpec 三阶段交付法：定义、方案、交付；只设置两个实施前门禁
 - [`online-mvp-delivery.md`](online-mvp-delivery.md) — 以企业微信、ChatGPT Project 与代码仓库协同的一周线上 MVP 交付法

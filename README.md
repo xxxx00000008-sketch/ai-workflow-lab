@@ -58,7 +58,7 @@ V0.2 只优先验证三条工作线：
 1. 启动与授权
 → 2. 问题与范围确认
 → 3. 交付契约
-→ 4. 设计首个垂直切片
+→ 4. 按 OpenSpec 编译 proposal → specs → design → tasks，并设计首个垂直切片
 → 5. 实现与每日协作
 → 6. 测试与客户验收
 → 7. 发布或仓库交付
@@ -66,6 +66,8 @@ V0.2 只优先验证三条工作线：
 ```
 
 完整的逐步操作、每步的输入、具体动作、输出、质量门禁和失败处理见 [`项目交付操作系统`](03-workflows/project-delivery-operating-system.md)。一周线上 MVP 的时间压缩版本见 [`线上 MVP 交付工作流`](03-workflows/online-mvp-delivery.md)。
+
+需求进入 AI Agent 后采用 [`OpenSpec 三阶段交付法`](03-workflows/spec-plan-tasks-compilation.md)：定义（proposal + specs）、方案（design + tasks）、交付（apply + verify/archive）。四类文件只组成两个实施前审查包，不是四轮审批；验收后才将变化合入当前事实规范。
 
 ## 内容结构
 
